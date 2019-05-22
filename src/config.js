@@ -13,7 +13,7 @@ config.zoom = Number(config.zoom || 1.0)
 config.columns = Number(config.columns || 1)
 config.groupSuccessfulProjects = config.groupSuccessfulProjects || false
 config.projectsOrder = config.projectsOrder || ['name']
-config.gitlabs = config.gitlabs.map((gitlab) => {
+config.gitlabs = config.gitlabs.map(gitlab => {
   return {
     url: gitlab.url,
     ignoreArchived: gitlab.ignoreArchived === undefined ? true : gitlab.ignoreArchived,
@@ -23,7 +23,9 @@ config.gitlabs = config.gitlabs.map((gitlab) => {
     projects: {
       excludePipelineStatus: (gitlab.projects || {}).excludePipelineStatus || [],
       include: (gitlab.projects || {}).include || '',
-      exclude: (gitlab.projects || {}).exclude || ''
+      exclude: (gitlab.projects || {}).exclude || '',
+      includeBranches: (gitlab.projects || {}).includeBranches || '',
+      excludeBranches: (gitlab.projects || {}).excludeBranches || ''
     }
   }
 })
@@ -35,9 +37,12 @@ function expandTilde(path) {
 
 function validate(cfg) {
   assert.ok(cfg.gitlabs, 'Mandatory gitlab properties missing from configuration file')
-  cfg.gitlabs.forEach((gitlab) => {
+  cfg.gitlabs.forEach(gitlab => {
     assert.ok(gitlab.url, 'Mandatory gitlab url missing from configuration file')
-    assert.ok(gitlab['access-token'] || process.env.GITLAB_ACCESS_TOKEN, 'Mandatory gitlab access token missing from configuration (and none present at GITLAB_ACCESS_TOKEN env variable)')
+    assert.ok(
+      gitlab['access-token'] || process.env.GITLAB_ACCESS_TOKEN,
+      'Mandatory gitlab access token missing from configuration (and none present at GITLAB_ACCESS_TOKEN env variable)'
+    )
   })
   return cfg
 }
