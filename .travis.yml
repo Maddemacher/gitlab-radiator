@@ -2,6 +2,7 @@ language: node_js
 before_install:
   - npm i -g npm
 script:
- - npm audit
- - npm run eslint
- - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then npm test; fi'
+  - npm audit
+  - npm run eslint
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then npm test; fi'
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then npm test:e2e; fi'
